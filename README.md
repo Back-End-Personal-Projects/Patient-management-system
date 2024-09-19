@@ -14,3 +14,7 @@ contains the following files:
 2. **Models_init.py** - is used for setting up the database connection and configuration. It has the code for creating the database engine, defining base class and provides a function to initialize the database.
 3. **patient.py** - Deals with the patients data like creating patients tables.
 4. **appointment.py** - Deals with the appointments made for various patients .
+5. **specialist.py** - Contains the doctors' details.
+6. **department.py** - Has details on the different departments
+
+### Command Line Interface

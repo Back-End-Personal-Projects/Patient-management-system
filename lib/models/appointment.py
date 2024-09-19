@@ -8,11 +8,13 @@ class Appointment(Base):
     id = Column(Integer, primary_key=True)
     patient_id = Column(Integer, ForeignKey("patients.id"))
     specialist_id = Column(Integer, ForeignKey("specialist.id"))
-    appointment_time = Column(DateTime, nullable=False) 
+    appointment_time = Column(DateTime, nullable=False)
+    department_id = Column(Integer, ForeignKey("department.id"))
 
     #Create relationship to other files
     patient = relationship("Patient", back_populates="appointments")
     specialist = relationship("Specialist", back_populates="appointments")
+    department = relationship("Department", back_populates="appointments") 
 
 
     #Output display
@@ -20,5 +22,6 @@ class Appointment(Base):
         return f"<Appointment(
         patient_id={self.patient_id},{self.patient_name},
         specialist_id={self.specialist_name},
-        appointment_time={self.appointment_time})>"
+        appointment_time={self.appointment_time}
+        department_id={self.department_name})>"
 
