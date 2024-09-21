@@ -19,3 +19,6 @@ contains the following files:
 
 ### Command Line Interface
 The CLI provides a user-friendly way to interact with the hospital management system directly from the command line, allowing you to initialize the database and add patients, specialists,departments and appointments efficiently.
+
+
+
