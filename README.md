@@ -18,3 +18,4 @@ contains the following files:
 6. **department.py** - Has details on the different departments
 
 ### Command Line Interface
+The CLI provides a user-friendly way to interact with the hospital management system directly from the command line, allowing you to initialize the database and add patients, specialists,departments and appointments efficiently.

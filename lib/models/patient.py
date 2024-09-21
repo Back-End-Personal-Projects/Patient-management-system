@@ -8,11 +8,11 @@ class Patient(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     age = Column(Integer)
-    email = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
 
 
     #one to many rship with appointments
-    appointments = relationship("Appointmant", back_populates="patient")
+    appointments = relationship("Appointment", back_populates="patient", foreign_keys="[appointments]")
 
 
     def __repr__(self):

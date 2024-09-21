@@ -18,10 +18,5 @@ class Appointment(Base):
 
 
     #Output display
-    def __repr__ (self):
-        return f"<Appointment(
-        patient_id={self.patient_id},{self.patient_name},
-        specialist_id={self.specialist_name},
-        appointment_time={self.appointment_time}
-        department_id={self.department_name})>"
-
+    def __repr__(self):
+        return f"<Appointment(patient_id={self.patient_id}, specialist_id={self.specialist_id}, appointment_time={self.appointment_time})>"
