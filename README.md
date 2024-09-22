@@ -11,13 +11,13 @@ Create a virtual environment and install Pipenv.
 ### Migrations
 They are used to manage changes in the database. Alembic is used for migrations.
 1. This command initializes a new migration repository. It creates the necessary directory structure and files for managing database migrations in a project.
-   # _alembic init migration_ 
+   ### _alembic init migration_ 
 
 2. Create Initial Migration: To generate the initial migration files, run:
- # _alembic revision --autogenerate -m "Initial migration"_ 
+ ### _alembic revision --autogenerate -m "Initial migration"_ 
 
 3. Apply Migrations: After creating migration files, apply the migrations to your database:
-    # _alembic upgrade head_ 
+    ### _alembic upgrade head_ 
 
 ### Models Directory
 contains the following files:
