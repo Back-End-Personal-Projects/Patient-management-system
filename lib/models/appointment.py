@@ -1,16 +1,17 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, String
 from sqlalchemy.orm import relationship
-from . import Base
+from . import Base, get_session
 
 class Appointment(Base):
     __tablename__ ="appointments"
 
-    id = Column(Integer, primary_key=True)
+    appointment_id = Column(Integer, primary_key=True)
     patient_name = Column(String, nullable=False)
-    patient_id = Column(Integer, ForeignKey("patients.id"))
-    specialist_id = Column(Integer, ForeignKey("specialists.id"))
-    department_id = Column(Integer, ForeignKey("departments.id"), nullable=False)
+    patient_id = Column(Integer, ForeignKey("patients.patient_id"))
+    specialist_name = Column(String, nullable=False)
+    specialist_id = Column(Integer, ForeignKey("specialists.doc_id"))
     appointment_time = Column(DateTime, nullable=False)
+    department_id = Column(Integer, ForeignKey("departments.department_id"))
     
 
     #Create relationship to other files
@@ -23,7 +24,7 @@ class Appointment(Base):
     def __repr__(self):
      return (f"<Appointment(patient_name={self.patient_name}, "
             f"patient_id={self.patient_id}, "
-            f"specialist_id={self.specialist_id}, "
+            f"specialist_name={self.specialist_name}, "
             f"appointment_time={self.appointment_time})>")
 
     @property
@@ -35,3 +36,11 @@ class Appointment(Base):
         if not value:
             raise ValueError("Patient name cannot be empty.")
         self._name = value.strip().title()
+
+    @classmethod
+    def get_all(cls):
+        session = get_session() 
+        try:
+            return session.query(cls).all()  
+        finally:
+            session.close() 

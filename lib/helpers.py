@@ -58,7 +58,7 @@ def delete_department():
 
 # Specialist Functions
 
-def list_specialists():
+def list_specialist():
     specialists = Specialist.get_all()
     for specialist in specialists:
         print(specialist)
@@ -107,9 +107,15 @@ def delete_specialist():
     else:
         print(f'Specialist {id_} not found')
 
+def list_appointment_specialist():
+    appointments = Appointment.get_all() 
+    for appointment in appointments:
+        print(appointment) 
+
+
 # Patient Functions
 
-def list_patients():
+def list_patient():
     patients = Patient.get_all()
     for patient in patients:
         print(patient)
@@ -158,17 +164,33 @@ def delete_patient():
     else:
         print(f'Patient {id_} not found')
 
+def list_appointment_patient():
+    appointments = Appointment.get_all() 
+    for appointment in appointments:
+        print(appointment) 
+
+
 # Appointment Functions
 
-def list_appointments():
+def list_appointment():
     appointments = Appointment.get_all()
     for appointment in appointments:
         print(appointment)
 
-def find_appointment_by_patient_name():
+def find_appointment_by_name():
     name = input("Enter the patient's name: ")
-    appointment = Appointment.find_by_patient_name(name)
+    appointment = Appointment.find_by_name(name)
     print(appointment) if appointment else print(f'No appointments found for patient {name}')
+
+def find_appointment_by_id():
+    id_ = input("Enter the appointment id: ")
+    appointment = Appointment.find_by_id(id_)
+    print(appointment) if appointment else print(f'Appointment {id_} not found')
+
+def find_appointment_by_date():
+    date_ = input("Enter the appointment date: ")
+    appointment = Appointment.find_by_date(date_)
+    print(appointment) if appointment else print(f'Appointment {date_} not found')
 
 def find_appointment_by_specialist_name():
     name = input("Enter the specialist's name: ")
