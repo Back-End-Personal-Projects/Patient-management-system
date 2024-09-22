@@ -1,5 +1,5 @@
 from lib.models.__init__ import init_db
-from cli import cli
+from lib.cli import cli
 
 def main():
     """Main entry point for the application."""
