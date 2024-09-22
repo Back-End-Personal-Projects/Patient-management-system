@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, String
 from sqlalchemy.orm import relationship
-from models.__init__ import Base
+from . import Base
 
 class Appointment(Base):
     __tablename__ ="appointments"
@@ -9,6 +9,7 @@ class Appointment(Base):
     patient_name = Column(String, nullable=False)
     patient_id = Column(Integer, ForeignKey("patients.id"))
     specialist_id = Column(Integer, ForeignKey("specialists.id"))
+    department_id = Column(Integer, ForeignKey("departments.id"), nullable=False)
     appointment_time = Column(DateTime, nullable=False)
     
 

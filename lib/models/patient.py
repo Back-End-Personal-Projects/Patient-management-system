@@ -1,7 +1,7 @@
 # models/patient.py
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from models.__init__ import Base
+from . import Base
 
 class Patient(Base):
     __tablename__ = 'patients'

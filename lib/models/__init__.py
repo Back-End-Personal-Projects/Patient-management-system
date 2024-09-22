@@ -4,17 +4,15 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
+from .patient import Patient
+from .specialist import Specialist
+from .appointment import Appointment
+from .department import Department
+
 engine = create_engine('sqlite:///hospital.db',connect_args={"check_same_thread": False}) 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-def init_db():
-    from .department import Department
-    from .specialist import Specialist
-    from .patient import Patient
-    from .appointment import Appointment
-    
-
-
+def init_db(): 
     Base.metadata.create_all(bind=engine)
     

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from models.__init__ import Base
+from . import Base
 
 class Specialist(Base):
     __tablename__ = 'specialists'
