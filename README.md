@@ -11,7 +11,7 @@ Create a virtual environment and install Pipenv.
 ### Migrations
 They are used to manage changes in the database. Alembic is used for migrations.
 1. This command initializes a new migration repository. It creates the necessary directory structure and files for managing database migrations in a project.
-    * alembic init migration *
+    # alembic init migration *
 
 2. Create Initial Migration: To generate the initial migration files, run:
  * alembic revision --autogenerate -m "Initial migration" *
@@ -31,10 +31,10 @@ contains the following files:
 ### Command Line Interface
 The CLI provides a user-friendly way to interact with the hospital management system directly from the command line, allowing you to initialize the database and add patients, specialists,departments and appointments efficiently.
 
-### helpers.py
+### Helpers.py
 The helpers.py file contains utility functions that support various operations within the application. It includes functions that are used across multiple files, reducing code duplication. Examples might include formatting dates, validating input, or constructing database queries.
 
-### seed.py
+### Seed.py
 The seed.py file is used to populate the database with initial data. It includes scripts to insert sample or default data into the database, which can be useful for development and testing purposes.
 
 
