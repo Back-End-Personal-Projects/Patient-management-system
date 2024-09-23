@@ -2,6 +2,7 @@ from lib.models.department import Department
 from lib.models.specialist import Specialist
 from lib.models.patient import Patient
 from lib.models.appointment import Appointment
+from datetime import datetime
 
 def exit_program():
     print("Goodbye!")
@@ -195,7 +196,7 @@ def list_appointment():
 
 def find_appointment_by_name():
     name = input("Enter the patient's name: ")
-    appointment = Appointment.find_by_name(name)
+    appointment = Appointment.find_by_patient_name(name)
     print(appointment) if appointment else print(f'No appointments found for patient {name}')
 
 def find_appointment_by_id():
@@ -216,10 +217,17 @@ def find_appointment_by_specialist_name():
 def create_appointment():
     patient_id = input("Enter the patient's id: ")
     specialist_id = input("Enter the specialist's id: ")
-    appointment_date = input("Enter the appointment date (YYYY-MM-DD): ")
+    appointment_date_str= input("Enter the appointment date (YYYY-MM-DD): ")
     try:
-        appointment = Appointment.create(patient_id, specialist_id, appointment_date)
+        appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %H:%M")
+        department_id = input("Enter the department's id: ")
+        
+        appointment = Appointment.create(patient_id, specialist_id, appointment_time)
         print(f'Success: {appointment}')
+
+    except ValueError as ve:
+        print("Error: Invalid date format.", ve)
+
     except Exception as exc:
         print("Error creating appointment: ", exc)
 

@@ -1,14 +1,13 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, String
+from sqlalchemy import Column, Integer, ForeignKey, String, func
 from sqlalchemy.orm import relationship
+from sqlalchemy import DateTime
 from . import Base, get_session
 
 class Appointment(Base):
     __tablename__ ="appointments"
 
     appointment_id = Column(Integer, primary_key=True)
-    patient_name = Column(String, nullable=False)
     patient_id = Column(Integer, ForeignKey("patients.patient_id"))
-    specialist_name = Column(String, nullable=False)
     specialist_id = Column(Integer, ForeignKey("specialists.doc_id"))
     appointment_time = Column(DateTime, nullable=False)
     department_id = Column(Integer, ForeignKey("departments.department_id"))
@@ -22,9 +21,9 @@ class Appointment(Base):
 
     #Output display
     def __repr__(self):
-     return (f"patient_name: {self.patient_name}, "
+     return (f"patient_name: {self.patient.name if self.patient else 'Client does not have appointment'}, "
             f"patient_id: {self.patient_id}, "
-            f"specialist_name: {self.specialist_name}, "
+            f"specialist_name: {self.specialist.name if self.specialist else 'N/A'}, "
             f"appointment_time:{self.appointment_time}")
 
   
@@ -48,7 +47,7 @@ class Appointment(Base):
     def find_by_patient_name(cls, name):
         session = get_session()
         try:
-            return session.query(cls).filter(cls.patient_name == name).all()
+            return session.query(cls).join(cls.patient).filter(func.lower(cls.patient.name) == name.lower()).all()
         finally:
             session.close()
 
@@ -56,7 +55,7 @@ class Appointment(Base):
     def find_by_specialist_name(cls, name):
         session = get_session()
         try:
-            return session.query(cls).filter(cls.specialist_name == name).all()
+            return session.query(cls).join(cls.specialist).filter(func.lower(cls.specialist._name) == name.lower()).all()
         finally:
             session.close()
 
@@ -69,12 +68,10 @@ class Appointment(Base):
             session.close()
 
     @classmethod
-    def create(cls, patient_name, patient_id, specialist_name, specialist_id, appointment_time, department_id):
+    def create(cls, patient_id, specialist_id, appointment_time, department_id):
         session = get_session()
         new_appointment = cls(
-            patient_name=patient_name,
             patient_id=patient_id,
-            specialist_name=specialist_name,
             specialist_id=specialist_id,
             appointment_time=appointment_time,
             department_id=department_id
