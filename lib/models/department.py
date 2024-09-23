@@ -7,15 +7,15 @@ from . import Base, get_session
 class Department(Base):
     __tablename__ = 'departments'
 
-    department_id = Column(Integer, primary_key=True)
+    department_id = Column(Integer, primary_key=True, autoincrement=True)
     department_name = Column("name", String, nullable=False) 
 
     specialists = relationship("Specialist", back_populates="department")
     appointments = relationship("Appointment", back_populates="department")
 
     def __repr__(self):
-     return (f"<Department(name={self.name}, "
-             f" department_id={self.department_id})>")
+     return (f"Department_name: {self.name}, "
+             f" Department_id: {self.department_id}")
 
 
     @property
