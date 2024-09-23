@@ -36,6 +36,41 @@ def main():
         if choice == "0":
             exit_program()
         elif choice == "1":
+            patient_menu()  
+        elif choice == "2":
+            specialist_menu()  
+        elif choice == "3":
+            appointment_menu()  
+        elif choice == "4":
+            department_menu()  
+        else:
+            print("Invalid choice, please try again.")
+
+
+def menu():
+    print("Please select an option:")
+    print("0. Exit the program")
+    print("1. Manage patients")
+    print("2. Manage specialists")
+    print("3. Manage appointments")
+    print("4. Manage departments")
+
+def department_menu():
+    while True:
+
+        print("Department Management:")
+        print("0. Go back")
+        print("1. List all departments")
+        print("2. Find department by name")
+        print("3. Find department by id")
+        print("4. Create department")
+        print("5. Update department")
+        print("6. Delete department")
+        
+        choice = input("> ")
+        if choice == "0":
+            return  
+        elif choice == "1":
             list_departments()
         elif choice == "2":
             find_department_by_name()
@@ -47,29 +82,8 @@ def main():
             update_department()
         elif choice == "6":
             delete_department()
-        elif choice == "7":
-            patient_menu()  # Trigger patient management
-        elif choice == "8":
-            specialist_menu()  # Trigger specialist management
-        elif choice == "9":
-            appointment_menu()  # Trigger appointment management
         else:
-            print("Invalid choice, please try again.")
-
-
-def menu():
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. List all departments")
-    print("2. Find department by name")
-    print("3. Find department by id")
-    print("4. Create department")
-    print("5. Update department")
-    print("6. Delete department")
-    print("7. Manage patients")
-    print("8. Manage specialists")
-    print("9. Manage appointments")
-
+            print("Invalid choice, please try again.")     
 
 def patient_menu():
     while True:
@@ -145,9 +159,9 @@ def appointment_menu():
         elif choice == "1":
             list_appointment()
         elif choice == "2":
-            find_appointment_by_name()  # Update as needed for patient
+            find_appointment_by_name()  
         elif choice == "3":
-            list_appointment_specialist()  # Update as needed for specialist
+            list_appointment_specialist()  
         elif choice == "4":
             create_appointment()
         elif choice == "5":

@@ -46,3 +46,55 @@ class Specialist(Base):
             return session.query(cls).all()  
         finally:
             session.close() 
+
+    @classmethod
+    def find_by_id(cls, id_):
+        session = get_session()
+        try:
+            return session.query(cls).filter(cls.doc_id == id_).first()
+        finally:
+            session.close()
+
+    @classmethod
+    def create(cls, name, specialty, department_id):
+        session = get_session()
+        new_patient = cls(name=name, specialty=specialty, department_id=department_id)
+        try:
+            session.add(new_specialist)
+            session.commit()
+            return new_specialist
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def update(self):
+        session = get_session()
+        try:
+            session.merge(self)  
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def delete(self):
+        session = get_session()
+        try:
+            session.delete(self)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    @classmethod
+    def find_by_name(cls, name):
+        session = get_session()
+        try:
+            return session.query(cls).filter(cls._name == name).all()
+        finally:
+            session.close()

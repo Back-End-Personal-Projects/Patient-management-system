@@ -20,7 +20,7 @@ def find_department_by_name():
 def find_department_by_id():
     id_ = input("Enter the department's id: ")
     department = Department.find_by_id(id_)
-    print(department) if department else print(f'Department {id_} not found')
+    print(department) if department else print(f'Department not found')
 
 def create_department():
     name = input("Enter the department's name: ")
@@ -133,9 +133,14 @@ def find_patient_by_id():
 def create_patient():
     name = input("Enter the patient's name: ")
     age = input("Enter the patient's age: ")
+    sex = input("Enter the patient's sex: ")
+    
     try:
-        patient = Patient.create(name, age)
+        age = int(age)
+        patient = Patient.create(name, age, sex)
         print(f'Success: {patient}')
+    except ValueError:
+        print("Error: Age must be a positive integer")
     except Exception as exc:
         print("Error creating patient: ", exc)
 
@@ -146,8 +151,11 @@ def update_patient():
         try:
             name = input("Enter the patient's new name: ")
             age = input("Enter the patient's new age: ")
+            sex = input("Enter the patient's new sex: ")
+
             patient.name = name
             patient.age = age
+            patient.sex = sex
             patient.update()
             print(f'Success: {patient}')
         except Exception as exc:

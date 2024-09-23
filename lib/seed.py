@@ -31,8 +31,8 @@ def seed_database():
 
             # Create Patients
             patients = [
-                Patient(name="Alice", age=30),
-                Patient(name="Bob", age=40)
+                Patient(name="Alice", age=30, sex="Female"),
+                Patient(name="Bob", age=40, sex="Male")
             ]
 
             session.add_all(patients)
@@ -40,9 +40,16 @@ def seed_database():
 
             # Create Appointments
             appointments = [
-                Appointment(patient_id=patients[0].id, specialist_id=specialists[0].id,
+                Appointment(patient_id=patients[0].patient_id, 
+                            specialist_id=specialists[0].doc_id,
+                            patient_name=patients[0].name,  
+                            specialist_name=specialists[0].name,
                             appointment_time=datetime.datetime(2024, 10, 1, 10, 0)),
-                Appointment(patient_id=patients[1].id, specialist_id=specialists[1].id,
+                
+                Appointment(patient_id=patients[1].patient_id, 
+                            specialist_id=specialists[1].doc_id,
+                            patient_name=patients[1].name,
+                            specialist_name=specialists[1].name,
                             appointment_time=datetime.datetime(2024, 10, 2, 11, 30))
             ]
            
