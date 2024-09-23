@@ -222,7 +222,7 @@ def create_appointment():
         appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %H:%M")
         department_id = input("Enter the department's id: ")
         
-        appointment = Appointment.create(patient_id, specialist_id, appointment_time)
+        appointment = Appointment.create(patient_id, specialist_id, appointment_time, department_id)
         print(f'Success: {appointment}')
 
     except ValueError as ve:
@@ -238,16 +238,19 @@ def update_appointment():
         try:
             patient_id = input("Enter the new patient's id: ")
             specialist_id = input("Enter the new specialist's id: ")
-            appointment_date = input("Enter the new appointment date (YYYY-MM-DD): ")
+            appointment_date_str = input("Enter the new appointment date (YYYY-MM-DD): ")
+            appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d")
+            
             appointment.patient_id = patient_id
             appointment.specialist_id = specialist_id
-            appointment.appointment_date = appointment_date
+            appointment.appointment_time = appointment_time  
             appointment.update()
             print(f'Success: {appointment}')
         except Exception as exc:
             print("Error updating appointment: ", exc)
     else:
         print(f'Appointment {id_} not found')
+
 
 def delete_appointment():
     id_ = input("Enter the appointment's id: ")

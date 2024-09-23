@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, func
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, joinedload
 from sqlalchemy import DateTime
 from . import Base, get_session
+from .patient import Patient
+from .specialist import Specialist
 
 class Appointment(Base):
     __tablename__ ="appointments"
@@ -21,17 +23,21 @@ class Appointment(Base):
 
     #Output display
     def __repr__(self):
-     return (f"patient_name: {self.patient.name if self.patient else 'Client does not have appointment'}, "
-            f"patient_id: {self.patient_id}, "
-            f"specialist_name: {self.specialist.name if self.specialist else 'N/A'}, "
-            f"appointment_time:{self.appointment_time}")
+        patient_name = self.patient.name if self.patient else 'N/A'
+        specialist_name = self.specialist.name if self.specialist else 'N/A'
+        return (f"appointment_id: {self.appointment_id}, "
+                f"patient_name: {patient_name}, "
+                f"specialist_name: {specialist_name}, "
+                f"appointment_time: {self.appointment_time}")
 
   
     @classmethod
     def get_all(cls):
         session = get_session() 
         try:
-            return session.query(cls).all()  
+            return session.query(cls).options(joinedload(cls.patient), 
+                                           joinedload(cls.specialist), 
+                                           joinedload(cls.department)).all()
         finally:
             session.close() 
 
@@ -47,7 +53,7 @@ class Appointment(Base):
     def find_by_patient_name(cls, name):
         session = get_session()
         try:
-            return session.query(cls).join(cls.patient).filter(func.lower(cls.patient.name) == name.lower()).all()
+           return session.query(cls).join(cls.patient).filter(func.lower(Patient._name) == name.lower()).options(joinedload(cls.patient), joinedload(cls.specialist)).all()
         finally:
             session.close()
 
@@ -55,7 +61,13 @@ class Appointment(Base):
     def find_by_specialist_name(cls, name):
         session = get_session()
         try:
-            return session.query(cls).join(cls.specialist).filter(func.lower(cls.specialist._name) == name.lower()).all()
+             return (
+            session.query(cls)
+            .join(cls.specialist)
+            .filter(func.lower(Specialist._name) == name.lower())
+            .options(joinedload(cls.patient), joinedload(cls.specialist))  # Eager load
+            .all()
+        )
         finally:
             session.close()
 
