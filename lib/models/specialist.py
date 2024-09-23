@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from . import Base, get_session
 
@@ -15,9 +15,9 @@ class Specialist(Base):
     department = relationship("Department", back_populates="specialists", foreign_keys=[department_id]) 
 
     def __repr__(self):
-        return (f"<Specialist(name={self._name}, " 
-                f"specialty={self.specialty}, " 
-                f"department_id={self.department_id})>")
+        return (f"Name: {self._name},\n" 
+                f"Specialty: {self._specialty}, \n " 
+                f"Department_id: {self.department_id}")
     
     @property
     def name(self):
@@ -58,7 +58,7 @@ class Specialist(Base):
     @classmethod
     def create(cls, name, specialty, department_id):
         session = get_session()
-        new_patient = cls(name=name, specialty=specialty, department_id=department_id)
+        new_specialist = cls(name=name, specialty=specialty, department_id=department_id)
         try:
             session.add(new_specialist)
             session.commit()

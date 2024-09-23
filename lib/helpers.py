@@ -75,9 +75,19 @@ def find_specialist_by_id():
 
 def create_specialist():
     name = input("Enter the specialist's name: ")
-    department_id = input("Enter the department's id: ")
+    specialty = input("Enter the specialist's specialty: ")
+        
     try:
-        specialist = Specialist.create(name, department_id)
+        department_id = int(input("Enter the department's id: "))
+        if not Department.find_by_id(department_id):
+            print(f"Error: Department ID {department_id} does not exist.")
+            return
+    except ValueError:
+        print("Error: Department ID must be an integer.")
+        return
+    
+    try:
+        specialist = Specialist.create(name, specialty, department_id)
         print(f'Success: {specialist}')
     except Exception as exc:
         print("Error creating specialist: ", exc)
