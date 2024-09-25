@@ -75,13 +75,19 @@ class Appointment(Base):
     def find_by_date(cls, date_):
         session = get_session()
         try:
-            return session.query(cls).filter(cls.appointment_time == date_).all()
+            return session.query(cls).options(joinedload(cls.patient), joinedload(cls.specialist)).filter(func.date(cls.appointment_time) == date_).all()
         finally:
             session.close()
 
     @classmethod
     def create(cls, patient_id, specialist_id, appointment_time, department_id):
         session = get_session()
+        
+        patient = session.query(Patient).filter(Patient.patient_id == patient_id).first()
+        if not patient:
+            raise ValueError(f"Patient with ID {patient_id} does not exist.")
+
+
         new_appointment = cls(
             patient_id=patient_id,
             specialist_id=specialist_id,

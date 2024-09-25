@@ -204,15 +204,33 @@ def find_appointment_by_id():
     appointment = Appointment.find_by_id(id_)
     print(appointment) if appointment else print(f'Appointment {id_} not found')
 
+
 def find_appointment_by_date():
-    date_ = input("Enter the appointment date: ")
-    appointment = Appointment.find_by_date(date_)
-    print(appointment) if appointment else print(f'Appointment {date_} not found')
+    date_str = input("Enter the appointment date (YYYY-MM-DD): ")
+    try:
+        
+        date_ = datetime.strptime(date_str, "%Y-%m-%d").date()
+        
+        
+        appointments = Appointment.find_by_date(date_)
+        
+        if appointments:
+            for appointment in appointments:
+                print(appointment)
+        else:
+            print(f'No appointments found for date {date_str}.')
+    except ValueError:
+        print("Error: Invalid date format. Please use YYYY-MM-DD.")
 
 def find_appointment_by_specialist_name():
     name = input("Enter the specialist's name: ")
-    appointment = Appointment.find_by_specialist_name(name)
-    print(appointment) if appointment else print(f'No appointments found for specialist {name}')
+    appointments = Appointment.find_by_specialist_name(name)
+    
+    if appointments:
+        for appointment in appointments:
+            print(appointment)
+    else:
+        print(f'No appointments found for {name}.')
 
 def create_appointment():
     patient_id = input("Enter the patient's id: ")
@@ -239,7 +257,7 @@ def update_appointment():
             patient_id = input("Enter the new patient's id: ")
             specialist_id = input("Enter the new specialist's id: ")
             appointment_date_str = input("Enter the new appointment date (YYYY-MM-DD): ")
-            appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d")
+            appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %HH:%M")
             
             appointment.patient_id = patient_id
             appointment.specialist_id = specialist_id

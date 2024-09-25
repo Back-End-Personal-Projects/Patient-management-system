@@ -30,11 +30,14 @@ contains the following files:
 
 ### Command Line Interface
 The CLI provides a user-friendly way to interact with the hospital management system directly from the command line, allowing you to initialize the database and add patients, specialists,departments and appointments efficiently.
+To access the cli.py:
+# _python -m lib.cli_
 
 ### Helpers.py
 The helpers.py file contains utility functions that support various operations within the application. It includes functions that are used across multiple files, reducing code duplication. Examples might include formatting dates, validating input, or constructing database queries.
 
 ### Seed.py
 The seed.py file is used to populate the database with initial data. It includes scripts to insert sample or default data into the database, which can be useful for development and testing purposes.
+
 
 

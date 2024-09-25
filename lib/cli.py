@@ -20,12 +20,12 @@ from lib.helpers import (
     delete_patient,
     list_appointment,
     find_appointment_by_name,
-    find_appointment_by_id,
+    find_appointment_by_specialist_name,
+    find_appointment_by_date,
     create_appointment,
     update_appointment,
-    delete_appointment,
-    list_appointment_specialist,
-    list_appointment_patient
+    delete_appointment
+    
 )
 
 
@@ -150,9 +150,11 @@ def appointment_menu():
         print("1. List all appointments")
         print("2. Find appointment by patient name")
         print("3. Find appointment by specialist name")
-        print("4. Create appointment")
-        print("5. Update appointment")
-        print("6. Delete appointment")
+        print("4. Find appointment by date")
+        print("5. Create appointment")
+        print("6. Update appointment")
+        print("7. Delete appointment")
+        
         choice = input("> ")
         if choice == "0":
             break
@@ -161,12 +163,14 @@ def appointment_menu():
         elif choice == "2":
             find_appointment_by_name()  
         elif choice == "3":
-            list_appointment_specialist()  
+            find_appointment_by_specialist_name()
         elif choice == "4":
-            create_appointment()
+            find_appointment_by_date() 
         elif choice == "5":
-            update_appointment()
+            create_appointment()
         elif choice == "6":
+            update_appointment()
+        elif choice == "7":
             delete_appointment()
         else:
             print("Invalid choice, please try again.")
