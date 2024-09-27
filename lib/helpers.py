@@ -3,6 +3,9 @@ from lib.models.specialist import Specialist
 from lib.models.patient import Patient
 from lib.models.appointment import Appointment
 from datetime import datetime
+from lib.models import SessionLocal
+
+session = SessionLocal()
 
 def exit_program():
     print("Goodbye!")
@@ -25,12 +28,21 @@ def find_department_by_id():
 
 def create_department():
     name = input("Enter the department's name: ")
-    
-    try:
-        department = Department.create(name)
-        print(f'Success: {department}')
+       
+    try:      
+        # Create a new department instance
+        department = Department(name=name)
+
+        # Add to session and commit
+        session.add(department)
+        session.commit()
+        print(f'Success:  {department.name} department was created.')
+    except ValueError as ve:
+        print("Error: ", ve)
     except Exception as exc:
-        print("Error creating department:", exc)
+        session.rollback()  # Roll back in case of an error
+        print("Error creating department: ", exc)
+
 
 def update_department():
     id_ = input("Enter the department's id: ")
@@ -85,10 +97,18 @@ def create_specialist():
         print("Error: Department ID must be an integer.")
         return
     
-    try:
-        specialist = Specialist.create(name, specialty, department_id)
-        print(f'Success: {specialist}')
+    try:      
+        # Create a new specialist instance
+        specialist = Specialist(name=name,specialty=specialty, department_id=department_id)
+
+        # Add to session and commit
+        session.add(specialist)
+        session.commit()
+        print(f'Success: Specialist {specialist.name} was created.')
+    except ValueError as ve:
+        print("Error: ", ve)
     except Exception as exc:
+        session.rollback()  # Roll back in case of an error
         print("Error creating specialist: ", exc)
 
 def update_specialist():
@@ -97,11 +117,13 @@ def update_specialist():
     if specialist:
         try:
             name = input("Enter the specialist's new name: ")
+            specialty=input("Enter the new specialty: ")
             department_id = input("Enter the new department's id: ")
             specialist.name = name
+            specialist.specialty = specialty
             specialist.department_id = department_id
             specialist.update()
-            print(f'Success: {specialist}')
+            print(f'Success: {specialist} has been updated.')
         except Exception as exc:
             print("Error updating specialist: ", exc)
     else:
@@ -146,11 +168,20 @@ def create_patient():
     
     try:
         age = int(age)
-        patient = Patient.create(name, age, sex)
-        print(f'Success: {patient}')
-    except ValueError:
-        print("Error: Age must be a positive integer")
+        if age < 0:
+            raise ValueError("Age must be a non-negative integer.")
+        
+        # Create a new patient instance
+        patient = Patient(name=name, age=age, sex=sex)
+
+        # Add to session and commit
+        session.add(patient)
+        session.commit()
+        print(f'Success: Patient {patient.name} was created.')
+    except ValueError as ve:
+        print("Error: ", ve)
     except Exception as exc:
+        session.rollback()  # Roll back in case of an error
         print("Error creating patient: ", exc)
 
 def update_patient():
@@ -159,7 +190,7 @@ def update_patient():
     if patient:
         try:
             name = input("Enter the patient's new name: ")
-            age = input("Enter the patient's new age: ")
+            age = int(input("Enter the patient's new age: "))
             sex = input("Enter the patient's new sex: ")
 
             patient.name = name
@@ -233,22 +264,70 @@ def find_appointment_by_specialist_name():
         print(f'No appointments found for {name}.')
 
 def create_appointment():
-    patient_id = input("Enter the patient's id: ")
-    specialist_id = input("Enter the specialist's id: ")
-    appointment_date_str= input("Enter the appointment date (YYYY-MM-DD): ")
     try:
-        appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %H:%M")
-        department_id = input("Enter the department's id: ")
+        patient_id = input("Enter the patient's id: ")
+        specialist_id = input("Enter the specialist's id: ")
         
+        # Validate IDs
+        if not Patient.find_by_id(patient_id):
+            print(f"Error: Patient ID {patient_id} does not exist.")
+            return
+        if not Specialist.find_by_id(specialist_id):
+            print(f"Error: Specialist ID {specialist_id} does not exist.")
+            return
+        
+        appointment_date_str = input("Enter the appointment date and time (YYYY-MM-DD HH:MM): ")
+        
+        # Parse the appointment time
+        try:
+            appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %H:%M")
+        except ValueError:
+            print("Error: Invalid date format. Please use YYYY-MM-DD HH:MM.")
+            return
+        
+        department_id = input("Enter the department's id: ")
+        if not Department.find_by_id(department_id):
+            print(f"Error: Department ID {department_id} does not exist.")
+            return
+        
+        # Create the appointment
         appointment = Appointment.create(patient_id, specialist_id, appointment_time, department_id)
-        print(f'Success: {appointment}')
-
-    except ValueError as ve:
-        print("Error: Invalid date format.", ve)
-
+        print(f'Success: Appointment created for patient ID {patient_id} with specialist ID {specialist_id} on {appointment_time}.')
+    
     except Exception as exc:
         print("Error creating appointment: ", exc)
 
+
+#def create_appointment():
+    #patient_id = input("Enter the patient's id: ")
+    #specialist_id = input("Enter the specialist's id: ")
+    #appointment_date_str= input("Enter the appointment date (YYYY-MM-DD): ")
+    # try:
+    #     appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %H:%M")
+    #     department_id = input("Enter the department's id: ")
+        
+    #     appointment = Appointment.create(patient_id, specialist_id, appointment_time, department_id)
+    #     print(f'Success: {appointment}')
+
+    # except ValueError as ve:
+    #     print("Error: Invalid date format.", ve)
+
+    # except Exception as exc:
+    #     print("Error creating appointment: ", exc)
+    # try:
+    #     appointment_time = datetime.strptime(appointment_date_str, "%Y-%m-%d %H:%M")
+    #     department_id = input("Enter the department's id: ")
+        
+    #     # Create the appointment
+    #     appointment = Appointment.create(patient_id, specialist_id, appointment_time, department_id)
+    #     print(f'Success: {appointment}')
+
+    # except ValueError as ve:
+    #     print("Error: Invalid input.", ve)
+
+    # except Exception as exc:
+    #     print("Error creating appointment: ", exc)
+            
 def update_appointment():
     id_ = input("Enter the appointment's id: ")
     appointment = Appointment.find_by_id(id_)
